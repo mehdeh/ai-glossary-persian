@@ -31,7 +31,7 @@ This project is an online glossary for specialized artificial intelligence termi
 
 ## License
 
-This project is published under the Creative Commons Attribution-ShareAlike license.
+This project is free and open source. Anyone can use, modify, and distribute this project freely. The content is based on the [Glossary of artificial intelligence](https://en.wikipedia.org/wiki/Glossary_of_artificial_intelligence) from Wikipedia, which is available under Creative Commons Attribution-ShareAlike license.
 
 ## Source
 
