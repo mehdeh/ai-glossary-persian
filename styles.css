@@ -68,7 +68,7 @@ header h1 {
 
 .nav-content {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     gap: 1.5rem;
 }
 
@@ -115,31 +115,6 @@ header h1 {
     box-shadow: var(--shadow);
 }
 
-.alphabet-nav {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    gap: 0.5rem;
-}
-
-.alphabet-nav a {
-    display: inline-block;
-    padding: 0.5rem 0.75rem;
-    background: var(--bg-light);
-    color: var(--text-color);
-    text-decoration: none;
-    border-radius: 6px;
-    font-weight: 500;
-    transition: var(--transition);
-    border: 1px solid var(--border-color);
-}
-
-.alphabet-nav a:hover,
-.alphabet-nav a.active {
-    background: var(--primary-color);
-    color: white;
-    border-color: var(--primary-color);
-}
 
 /* Main Content */
 main {

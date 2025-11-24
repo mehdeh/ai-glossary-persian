@@ -2,28 +2,28 @@
 
 // Initialize the page
 document.addEventListener('DOMContentLoaded', function() {
-    initializeAlphabetNav();
     displayAllTerms();
     setupSearch();
     setupCategoryFilters();
 });
 
-// Initialize alphabet navigation
-function initializeAlphabetNav() {
-    const alphabetNav = document.getElementById('alphabetNav');
-    const persianAlphabet = ['آ', 'ا', 'ب', 'پ', 'ت', 'ث', 'ج', 'چ', 'ح', 'خ', 'د', 'ذ', 'ر', 'ز', 'ژ', 'س', 'ش', 'ص', 'ض', 'ط', 'ظ', 'ع', 'غ', 'ف', 'ق', 'ک', 'گ', 'ل', 'م', 'ن', 'و', 'ه', 'ی'];
-    
-    persianAlphabet.forEach(letter => {
-        const link = document.createElement('a');
-        link.href = '#';
-        link.textContent = letter;
-        link.addEventListener('click', (e) => {
-            e.preventDefault();
-            filterByLetter(letter);
-            updateActiveLetter(link);
-        });
-        alphabetNav.appendChild(link);
-    });
+// Function to render MathJax formulas
+function renderMathJax() {
+    // Wait for MathJax to be fully loaded
+    if (window.MathJax) {
+        if (window.MathJax.typesetPromise) {
+            // MathJax 3.x
+            MathJax.typesetPromise().catch(function (err) {
+                console.log('MathJax rendering error:', err);
+            });
+        } else if (window.MathJax.Hub) {
+            // MathJax 2.x fallback
+            MathJax.Hub.Queue(["Typeset", MathJax.Hub]);
+        }
+    } else {
+        // If MathJax is not loaded yet, wait and try again
+        setTimeout(renderMathJax, 100);
+    }
 }
 
 // Display all terms
@@ -35,7 +35,7 @@ function displayAllTerms(terms = glossaryData) {
         container.innerHTML = `
             <div class="no-results">
                 <h3>نتیجه‌ای یافت نشد</h3>
-                <p>لطفاً کلمه دیگری را جستجو کنید یا از فهرست الفبایی استفاده کنید.</p>
+                <p>لطفاً کلمه دیگری را جستجو کنید یا از دسته‌بندی‌ها استفاده کنید.</p>
             </div>
         `;
         return;
@@ -62,6 +62,11 @@ function displayAllTerms(terms = glossaryData) {
         
         container.appendChild(letterSection);
     });
+    
+    // Render MathJax formulas after content is added
+    setTimeout(() => {
+        renderMathJax();
+    }, 100);
 }
 
 // Group terms by first letter
@@ -187,27 +192,6 @@ function debounce(func, wait) {
     };
 }
 
-// Filter by letter
-function filterByLetter(letter) {
-    const filtered = glossaryData.filter(term => term.title.charAt(0) === letter);
-    displayAllTerms(filtered);
-    
-    // Scroll to results
-    setTimeout(() => {
-        const container = document.getElementById('termsContainer');
-        if (container.children.length > 0) {
-            container.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }
-    }, 100);
-}
-
-// Update active letter in navigation
-function updateActiveLetter(activeLink) {
-    document.querySelectorAll('#alphabetNav a').forEach(link => {
-        link.classList.remove('active');
-    });
-    activeLink.classList.add('active');
-}
 
 // Setup category filters
 function setupCategoryFilters() {
@@ -250,13 +234,17 @@ window.addEventListener('hashchange', () => {
     }
 });
 
-// Initialize MathJax for formula rendering (if needed)
-if (typeof MathJax !== 'undefined') {
-    MathJax.Hub.Config({
-        tex2jax: {
-            inlineMath: [['$', '$'], ['\\(', '\\)']],
-            displayMath: [['$$', '$$'], ['\\[', '\\]']]
-        }
-    });
-}
+// Wait for MathJax to load, then render formulas
+window.addEventListener('load', function() {
+    if (window.MathJax) {
+        renderMathJax();
+    } else {
+        // If MathJax hasn't loaded yet, wait a bit more
+        setTimeout(() => {
+            if (window.MathJax) {
+                renderMathJax();
+            }
+        }, 500);
+    }
+});
 
